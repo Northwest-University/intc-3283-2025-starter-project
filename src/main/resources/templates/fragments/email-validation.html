@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="validation-result">
+        <div th:if="${email != null && !email.isEmpty()}" class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%); display: block;">
+            <i th:if="${isValid}" class="fas fa-check-circle text-success"></i>
+            <i th:unless="${isValid}" class="fas fa-times-circle text-danger"></i>
+        </div>
+    </div>
+</body>
+</html>

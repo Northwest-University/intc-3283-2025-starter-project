@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/main-fluid}">
+<div layout:fragment="content">
+    <div class="container">
+        <div class="col mt-5">
+            <div class="row">
+                <h1>403 Forbidden</h1>
+                <p class="text-muted">You do not have permission to access this resource.</p>
+
+                <div class="mt-3" sec:authorize="isAuthenticated()">
+                    <p>
+                        <strong>User:</strong>
+                        <span sec:authentication="name">anonymous</span>
+                    </p>
+                    <div>
+                        <strong>Roles:</strong>
+                        <ul class="mb-0" th:if="${#authentication != null and #authentication.authorities != null and #authentication.authorities.size() > 0}">
+                            <li th:each="auth : ${#authentication.authorities}" th:text="${auth.authority}">ROLE_USER</li>
+                        </ul>
+                        <p class="mb-0" th:if="${#authentication == null or #authentication.authorities == null or #authentication.authorities.size() == 0}">None</p>
+                    </div>
+                </div>
+
+                <div class="mt-3" sec:authorize="isAnonymous()">
+                    <p><strong>User:</strong> Not signed in</p>
+                    <p class="mb-0">You may need to sign in to access this page.</p>
+                </div>
+
+                <div class="mt-3" th:with="requestedUrl=${path != null ? path : ((#httpServletRequest != null) ? #httpServletRequest.requestURI : 'Unknown')},
+                                        reason=${(#httpServletRequest != null and #httpServletRequest.getAttribute('SPRING_SECURITY_403_EXCEPTION') != null) ? #httpServletRequest.getAttribute('SPRING_SECURITY_403_EXCEPTION').message : 'Your account does not have the required permissions to access this resource.'}">
+                    <p>
+                        <strong>Requested URL:</strong>
+                        <code th:text="${requestedUrl}">/</code>
+                    </p>
+                    <p>
+                        <strong>Reason:</strong>
+                        <span th:text="${reason}">
+                            Your account does not have the required permissions to access this resource.
+                        </span>
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <a class="btn btn-primary" th:href="@{/}">Go to homepage</a>
+                    <a class="btn btn-outline-secondary ms-2" href="javascript:history.back()">Go back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

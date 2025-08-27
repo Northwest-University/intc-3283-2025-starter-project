@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head.html :: head}"></head>
+<body>
+<div>
+    <nav th:replace="~{fragments/navigation :: div}"></nav>
+
+    <main class="container mt-4">
+        <h1>Welcome back</h1>
+        <p>You are signed in as <strong th:text="${principalName}">user</strong>.</p>
+        <p>Use the navigation bar to explore the application.</p>
+    </main>
+
+    <footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</div>
+</body>
+</html>

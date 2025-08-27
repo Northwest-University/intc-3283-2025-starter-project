@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: intc-3283-starter
+  threads:
+    virtual:
+      enabled: true
+  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start_only
+management:
+  server:
+    port: 8081

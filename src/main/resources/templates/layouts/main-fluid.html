@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head th:replace="~{fragments/head.html :: head}"></head>
+
+<body class="">
+    <div>
+
+        <nav th:replace="~{fragments/navigation :: div}"></nav>
+
+        <div layout:fragment="content" >Fake content</div>
+
+        <hr class="m-0">
+
+        <footer th:replace="~{fragments/footer.html :: footer}"></footer>
+
+    </div>
+
+
+</body>
+</html>

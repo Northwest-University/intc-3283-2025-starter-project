@@ -1,0 +1,27 @@
+
+<div class="main-container" th:if="${#sets.size(invalidBarcodes) > 0}">
+    <section id="" class="main">
+        <div class="row">
+            <div class="col">
+                <h3>Excluded from job</h3>
+                <p>The following submitted barcodes are not valid GTINs based on the standard way of validating a barcode.
+                    These may have been misread by the barcode scanner, contain a typo, or perhaps are a
+                    manufacturer-specific part number.</p>
+                <table class="table table-striped" >
+                    <thead>
+                    <tr>
+                        <th>Submitted Barcode</th>
+                        <th>Reason</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="line: ${invalidBarcodes}">
+                        <td th:text="${line}">GTIN</td>
+                        <td>Not a valid GTIN (UPC / EAN / ISBN)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>

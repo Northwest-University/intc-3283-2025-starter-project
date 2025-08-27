@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:8.4.6'
+    environment:
+      - 'MYSQL_DATABASE=mydatabase'
+      - 'MYSQL_PASSWORD=password'
+      - 'MYSQL_ROOT_PASSWORD=password'
+      - 'MYSQL_USER=intc3283'
+    ports:
+      - '3306'
