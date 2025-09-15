@@ -7,4 +7,8 @@ services:
       - 'MYSQL_ROOT_PASSWORD=password'
       - 'MYSQL_USER=intc3283'
     ports:
-      - '3306'
+      - '3306:3306'
+    volumes:
+      - mydatabase-data:/var/lib/mysql
+volumes:
+  - mydatabase-data:
