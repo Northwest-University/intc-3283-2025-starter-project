@@ -14,6 +14,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/users/**",
+                                "/users",
                                 "/actuator/health",
                                 "/favicon.ico",
                                 "/error",
