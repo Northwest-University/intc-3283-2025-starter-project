@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Alert</title>
+</head>
+<body>
+<h1>Weather Alert</h1>
+<p>Severity: <span th:text="${severity}">Unknown</span></p>
+<p>Urgency: <span th:text="${#strings.capitalize(urgency)}">SUPER DUPER URGENT</span>.</p>
+
+<a href="https://www.northwestu.edu">Created by the students at Northwest University!</a>
+
+</body>
+</html>

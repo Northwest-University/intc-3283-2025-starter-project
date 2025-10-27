@@ -6,6 +6,7 @@ import edu.northwestu.sampleproject.response.WeatherAlertDto;
 import edu.northwestu.sampleproject.response.WeatherAlertResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import java.util.Optional;
 
 @Service
 public class WeatherService {
@@ -29,6 +30,9 @@ public class WeatherService {
 
     public WeatherAlert saveWeatherAlert(WeatherAlertDto alert) {
         WeatherAlert weatherAlert = new WeatherAlert();
+        Optional<WeatherAlert> weatherAlertOptional = this.repo.findOneByExternalIdEquals(alert.getId());
+
+        weatherAlert = weatherAlertOptional.orElseGet(WeatherAlert::new);
         weatherAlert.setExternalId(alert.getId());
         weatherAlert.setCertainty(alert.getProperties().getCertainty());
         weatherAlert.setUrgency(alert.getProperties().getUrgency());
@@ -41,7 +45,10 @@ public class WeatherService {
         weatherAlert.setSeverity(alert.getProperties().getSeverity());
         weatherAlert.setInstruction(alert.getProperties().getInstruction());
         weatherAlert.setStatus(alert.getProperties().getStatus());
-        return this.repo.save(weatherAlert);
+
+        this.repo.save(weatherAlert);
+
+        return weatherAlert;
     }
 
 

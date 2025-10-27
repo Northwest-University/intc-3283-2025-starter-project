@@ -10,3 +10,17 @@ services:
       - '3306:3306'
     volumes:
       - .data:/var/lib/mysql
+  mailhog:
+    container_name: intc3283-mailhog
+    restart: unless-stopped
+    image: mailhog/mailhog
+    platform: linux/amd64
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://127.0.0.1:8025/api/v2/messages >/dev/null 2>&1 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "1025:1025"
+      - "8025:8025"
