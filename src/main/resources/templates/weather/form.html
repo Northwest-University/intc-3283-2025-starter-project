@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head.html :: head}"></head>
+<body>
+<div>
+    <nav th:replace="~{fragments/navigation :: div}"></nav>
+    <h1>Create a new weather alert</h1>
+
+    <form th:object="${dto}"
+          th:action="@{/create-weather-alert}"
+          method="post">
+
+
+        <input
+                type="text"
+                th:field="*{externalId}"
+                placeholder="External ID (E.g., a URL"
+        />
+
+        <input type="submit" name="submit" value="Create"/>
+
+
+    </form>
+
+</div>
+</body>
+</html>

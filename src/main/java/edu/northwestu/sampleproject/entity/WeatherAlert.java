@@ -2,7 +2,9 @@ package edu.northwestu.sampleproject.entity;
 
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Embedded;
 import org.springframework.data.relational.core.mapping.Table;
+import java.time.LocalDateTime;
 
 @Table("weather_alerts")
 public class WeatherAlert {
@@ -10,9 +12,11 @@ public class WeatherAlert {
     @Id
     private Long id;
     private String externalId;
-    private String sent;
-    private String effective;
-    private String expires;
+
+    private String affectedZones; // JSON array of zone IDs
+    private LocalDateTime sent;
+    private LocalDateTime effective;
+    private LocalDateTime expires;
     private String status;
     private String messageType;
     private String severity;
@@ -34,27 +38,27 @@ public class WeatherAlert {
         this.externalId = externalId;
     }
 
-    public String getSent() {
+    public LocalDateTime getSent() {
         return sent;
     }
 
-    public void setSent(String sent) {
+    public void setSent(LocalDateTime sent) {
         this.sent = sent;
     }
 
-    public String getEffective() {
+    public LocalDateTime getEffective() {
         return effective;
     }
 
-    public void setEffective(String effective) {
+    public void setEffective(LocalDateTime effective) {
         this.effective = effective;
     }
 
-    public String getExpires() {
+    public LocalDateTime getExpires() {
         return expires;
     }
 
-    public void setExpires(String expires) {
+    public void setExpires(LocalDateTime expires) {
         this.expires = expires;
     }
 
@@ -120,5 +124,13 @@ public class WeatherAlert {
 
     public void setInstruction(String instruction) {
         this.instruction = instruction;
+    }
+
+    public String getAffectedZones() {
+        return affectedZones;
+    }
+
+    public void setAffectedZones(String affectedZones) {
+        this.affectedZones = affectedZones;
     }
 }

@@ -13,6 +13,19 @@ public class WeatherAlertProperties {
     private String sender;
     private String description;
     private String instruction;
+    private Geocode geocode;
+
+    public static class Geocode {
+        private String[] UGC;
+        
+        public String[] getUGC() {
+            return UGC;
+        }
+        
+        public void setUGC(String[] UGC) {
+            this.UGC = UGC;
+        }
+    }
 
 
     public WeatherAlertProperties() {
@@ -108,5 +121,13 @@ public class WeatherAlertProperties {
 
     public void setInstruction(String instruction) {
         this.instruction = instruction;
+    }
+
+    public Geocode getGeocode() {
+        return geocode;
+    }
+
+    public void setGeocode(Geocode geocode) {
+        this.geocode = geocode;
     }
 }
