@@ -12,7 +12,6 @@ public class WeatherAlert {
     @Id
     private Long id;
     private String externalId;
-
     private String affectedZones; // JSON array of zone IDs
     private LocalDateTime sent;
     private LocalDateTime effective;
@@ -36,6 +35,14 @@ public class WeatherAlert {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public String getAffectedZones() {
+        return affectedZones;
+    }
+
+    public void setAffectedZones(String affectedZones) {
+        this.affectedZones = affectedZones;
     }
 
     public LocalDateTime getSent() {
@@ -124,13 +131,5 @@ public class WeatherAlert {
 
     public void setInstruction(String instruction) {
         this.instruction = instruction;
-    }
-
-    public String getAffectedZones() {
-        return affectedZones;
-    }
-
-    public void setAffectedZones(String affectedZones) {
-        this.affectedZones = affectedZones;
     }
 }

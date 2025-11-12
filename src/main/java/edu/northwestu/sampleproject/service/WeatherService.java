@@ -6,6 +6,7 @@ import edu.northwestu.sampleproject.response.WeatherAlertDto;
 import edu.northwestu.sampleproject.response.WeatherAlertResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -38,9 +39,9 @@ public class WeatherService {
         weatherAlert.setUrgency(alert.getProperties().getUrgency());
         weatherAlert.setSender(alert.getProperties().getSender());
         weatherAlert.setDescription(alert.getProperties().getDescription());
-       // weatherAlert.setSent(LocalDateTime.ofalert.getProperties().getSent());
-     //   weatherAlert.setEffective(alert.getProperties().getEffective());
-       // weatherAlert.setExpires(alert.getProperties().getExpires());
+        weatherAlert.setSent(LocalDateTime.parse(alert.getProperties().getSent()));
+        weatherAlert.setEffective(LocalDateTime.parse(alert.getProperties().getEffective()));
+        weatherAlert.setExpires(LocalDateTime.parse(alert.getProperties().getExpires()));
         weatherAlert.setMessageType(alert.getProperties().getMessageType());
         weatherAlert.setSeverity(alert.getProperties().getSeverity());
         weatherAlert.setInstruction(alert.getProperties().getInstruction());

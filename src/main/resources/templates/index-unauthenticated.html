@@ -1,13 +1,123 @@
 <!DOCTYPE html>
-<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head.html :: head}"></head>
 <body>
 <div>
     <nav th:replace="~{fragments/navigation :: div}"></nav>
 
     <main class="container mt-4">
-        <h1>Welcome to INTC-3283.</h1>
-        <p>This is the starter app where we will learn how to build a database-connected application, create custom reports, and build basic APIs.</p>
+        <h1>Weather Alerts</h1>
+        <p>Current weather alerts with pagination and sorting capabilities.</p>
+        <a class="btn btn-primary" th:href="@{'/form'}">Create a new weather alert</a>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>
+                        <a th:href="@{/(sortBy='sent', sortDir=${reverseSortDir}, page=${currentPage})}"
+                           class="text-white text-decoration-none">
+                            Sent <i class="fas fa-sort"
+                                    th:class="${sortBy == 'sent'} ? 'fas fa-sort-' + ${sortDir} : 'fas fa-sort'"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/(sortBy='severity', sortDir=${reverseSortDir}, page=${currentPage})}"
+                           class="text-white text-decoration-none">
+                            Severity <i class="fas fa-sort"
+                                        th:class="${sortBy == 'severity'} ? 'fas fa-sort-' + ${sortDir} : 'fas fa-sort'"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/(sortBy='urgency', sortDir=${reverseSortDir}, page=${currentPage})}"
+                           class="text-white text-decoration-none">
+                            Urgency <i class="fas fa-sort"
+                                       th:class="${sortBy == 'urgency'} ? 'fas fa-sort-' + ${sortDir} : 'fas fa-sort'"></i>
+                        </a>
+                    </th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="alert : ${alertPage.content}">
+                    <td th:text="${#temporals.format(alert.sent, 'MMM dd, yyyy HH:mm')}"></td>
+                    <td>
+                            <span class="badge"
+                                  th:class="'badge bg-' + ${alert.severity == 'Severe' ? 'danger' : (alert.severity == 'Moderate' ? 'warning' : 'info')}"
+                                  th:text="${alert.severity}"></span>
+                    </td>
+                    <td>
+                            <span class="badge"
+                                  th:class="'badge bg-' + ${alert.urgency == 'Immediate' ? 'danger' : (alert.urgency == 'Expected' ? 'warning' : 'secondary')}"
+                                  th:text="${alert.urgency}"></span>
+                    </td>
+                    <td th:text="${#strings.abbreviate(alert.description, 100)}"></td>
+                    <td th:text="${alert.status}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Alert pagination" th:if="${totalPages > 1}">
+            <ul class="pagination justify-content-center">
+                <!-- First page -->
+                <li class="page-item" th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" th:href="@{/(page=0, sortBy=${sortBy}, sortDir=${sortDir})}">
+                        <i class="fas fa-angle-double-left"></i> First
+                    </a>
+                </li>
+
+                <!-- Previous page -->
+                <li class="page-item" th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" th:href="@{/(page=${currentPage - 1}, sortBy=${sortBy}, sortDir=${sortDir})}">
+                        <i class="fas fa-angle-left"></i> Previous
+                    </a>
+                </li>
+
+                <!-- Page numbers -->
+                <li class="page-item"
+                    th:each="pageNum : ${#numbers.sequence(T(java.lang.Math).max(0, currentPage - 2), T(java.lang.Math).min(totalPages - 1, currentPage + 2))}"
+                    th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
+                    <a class="page-link" th:href="@{/(page=${pageNum}, sortBy=${sortBy}, sortDir=${sortDir})}"
+                       th:text="${pageNum + 1}"></a>
+                </li>
+
+                <!-- Next page -->
+                <li class="page-item" th:class="${currentPage >= totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" th:href="@{/(page=${currentPage + 1}, sortBy=${sortBy}, sortDir=${sortDir})}">
+                        Next <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+
+                <!-- Last page -->
+                <li class="page-item" th:class="${currentPage >= totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" th:href="@{/(page=${totalPages - 1}, sortBy=${sortBy}, sortDir=${sortDir})}">
+                        Last <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Pagination info -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted">
+                Showing <span th:text="${currentPage * alertPage.size + 1}"></span> to
+                <span th:text="${(currentPage + 1) * alertPage.size > alertPage.totalElements ? alertPage.totalElements : (currentPage + 1) * alertPage.size}"></span>
+                of <span th:text="${alertPage.totalElements}"></span> alerts
+            </small>
+            <div class="btn-group" role="group">
+                <a th:href="@{/(page=${currentPage}, sortBy=${sortBy}, sortDir=${sortDir}, size=5)}"
+                   class="btn btn-outline-secondary btn-sm"
+                   th:class="${alertPage.size == 5} ? 'btn btn-secondary btn-sm' : 'btn btn-outline-secondary btn-sm'">5</a>
+                <a th:href="@{/(page=${currentPage}, sortBy=${sortBy}, sortDir=${sortDir}, size=10)}"
+                   class="btn btn-outline-secondary btn-sm"
+                   th:class="${alertPage.size == 10} ? 'btn btn-secondary btn-sm' : 'btn btn-outline-secondary btn-sm'">10</a>
+                <a th:href="@{/(page=${currentPage}, sortBy=${sortBy}, sortDir=${sortDir}, size=25)}"
+                   class="btn btn-outline-secondary btn-sm"
+                   th:class="${alertPage.size == 25} ? 'btn btn-secondary btn-sm' : 'btn btn-outline-secondary btn-sm'">25</a>
+            </div>
+        </div>
     </main>
 
     <footer th:replace="~{fragments/footer.html :: footer}"></footer>

@@ -9,17 +9,12 @@
     <form th:object="${dto}"
           th:action="@{/create-weather-alert}"
           method="post">
-
-
         <input
                 type="text"
                 th:field="*{externalId}"
                 placeholder="External ID (E.g., a URL"
         />
-
         <input type="submit" name="submit" value="Create"/>
-
-
     </form>
 
 </div>
