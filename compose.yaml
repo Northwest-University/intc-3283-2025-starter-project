@@ -12,7 +12,6 @@ services:
       - .data:/var/lib/mysql
   mailhog:
     container_name: intc3283-mailhog
-    restart: unless-stopped
     image: mailhog/mailhog
     platform: linux/amd64
     healthcheck:

@@ -2,21 +2,201 @@
 <html lang="en-us" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head.html :: head}"></head>
 <body>
-<div>
-    <nav th:replace="~{fragments/navigation :: div}"></nav>
-    <h1>Create a new weather alert</h1>
+<nav th:replace="~{fragments/navigation :: div}"></nav>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${dto.id != null ? 'Edit Weather Alert' : 'Create Weather Alert'}">Create Weather Alert</span>
+                    </h2>
+                </div>
+                <div class="card-body">
 
-    <form th:object="${dto}"
-          th:action="@{/create-weather-alert}"
-          method="post">
-        <input
-                type="text"
-                th:field="*{externalId}"
-                placeholder="External ID (E.g., a URL"
-        />
-        <input type="submit" name="submit" value="Create"/>
-    </form>
+                    <form th:object="${dto}" th:action="@{/weather-alerts}" method="post" class="needs-validation"
+                          novalidate>
+                        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"
+                               th:if="${_csrf}"/>
+                        <input type="hidden" th:field="*{id}"/>
 
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mb-3">
+                            <h6>Please correct the following errors:</h6>
+                            <ul class="mb-0">
+                                <li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="externalId" class="form-label">External ID *</label>
+                                    <input type="text" class="form-control" id="externalId" th:field="*{externalId}"
+                                           th:classappend="${#fields.hasErrors('externalId')} ? 'is-invalid' : ''"
+                                           placeholder="Enter external ID (e.g., a URL)" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('externalId')}"
+                                         th:errors="*{externalId}"></div>
+                                    <small class="text-danger" th:if="${#fields.hasErrors('externalId')}"
+                                           th:errors="*{externalId}"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="sender" class="form-label">Sender *</label>
+                                    <input type="text" class="form-control" id="sender" th:field="*{sender}"
+                                           th:classappend="${#fields.hasErrors('sender')} ? 'is-invalid' : ''"
+                                           placeholder="Enter sender name" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('sender')}"
+                                         th:errors="*{sender}"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="effective" class="form-label">Effective Date *</label>
+                                    <input type="datetime-local" class="form-control" id="effective"
+                                           th:field="*{effective}"
+                                           th:classappend="${#fields.hasErrors('effective')} ? 'is-invalid' : ''"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('effective')}"
+                                         th:errors="*{effective}"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="expires" class="form-label">Expiration Date *</label>
+                                    <input type="datetime-local" class="form-control" id="expires" th:field="*{expires}"
+                                           th:classappend="${#fields.hasErrors('expires')} ? 'is-invalid' : ''"
+                                           required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('expires')}"
+                                         th:errors="*{expires}"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="urgency" class="form-label">Urgency</label>
+                                    <select class="form-select" id="urgency" th:field="*{urgency}"
+                                            th:classappend="${#fields.hasErrors('urgency')} ? 'is-invalid' : ''">
+                                        <option value="">Select urgency</option>
+                                        <option value="super urgent">Super Urgent</option>
+                                        <option value="not urgent">Not Urgent</option>
+                                        <option value="unknown">Unknown</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('urgency')}"
+                                         th:errors="*{urgency}"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="severity" class="form-label">Severity</label>
+                                    <select class="form-select" id="severity" th:field="*{severity}"
+                                            th:classappend="${#fields.hasErrors('severity')} ? 'is-invalid' : ''">
+                                        <option value="">Select severity</option>
+                                        <option value="Extreme">Extreme</option>
+                                        <option value="Severe">Severe</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Minor">Minor</option>
+                                        <option value="Unknown">Unknown</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('severity')}"
+                                         th:errors="*{severity}"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="certainty" class="form-label">Certainty</label>
+                                    <select class="form-select" id="certainty" th:field="*{certainty}"
+                                            th:classappend="${#fields.hasErrors('certainty')} ? 'is-invalid' : ''">
+                                        <option value="">Select certainty</option>
+                                        <option value="Observed">Observed</option>
+                                        <option value="Likely">Likely</option>
+                                        <option value="Possible">Possible</option>
+                                        <option value="Unlikely">Unlikely</option>
+                                        <option value="Unknown">Unknown</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('certainty')}"
+                                         th:errors="*{certainty}"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" th:field="*{status}"
+                                            th:classappend="${#fields.hasErrors('status')} ? 'is-invalid' : ''">
+                                        <option value="">Select status</option>
+                                        <option value="Actual">Actual</option>
+                                        <option value="Exercise">Exercise</option>
+                                        <option value="System">System</option>
+                                        <option value="Test">Test</option>
+                                        <option value="Draft">Draft</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}"
+                                         th:errors="*{status}"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="messageType" class="form-label">Message Type</label>
+                                    <select class="form-select" id="messageType" th:field="*{messageType}"
+                                            th:classappend="${#fields.hasErrors('messageType')} ? 'is-invalid' : ''">
+                                        <option value="">Select message type</option>
+                                        <option value="Alert">Alert</option>
+                                        <option value="Update">Update</option>
+                                        <option value="Cancel">Cancel</option>
+                                        <option value="Ack">Ack</option>
+                                        <option value="Error">Error</option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('messageType')}"
+                                         th:errors="*{messageType}"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description *</label>
+                            <textarea class="form-control" id="description" th:field="*{description}"
+                                      th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                                      placeholder="Enter alert description" rows="4" required></textarea>
+                            <dev th:text="${dto.description}"></dev>
+
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}"
+                                 th:errors="*{description}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="instruction" class="form-label">Instruction</label>
+                            <textarea class="form-control" id="instruction" th:field="*{instruction}"
+                                      th:classappend="${#fields.hasErrors('instruction')} ? 'is-invalid' : ''"
+                                      placeholder="Enter instructions for recipients" rows="3"></textarea>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('instruction')}"
+                                 th:errors="*{instruction}"></div>
+                        </div>
+
+
+                        <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                            <div th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>
+                                <span th:text="${dto.id != null ? 'Update Weather Alert' : 'Create Weather Alert'}">Create Weather Alert</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

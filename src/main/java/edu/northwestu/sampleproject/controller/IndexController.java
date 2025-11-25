@@ -34,7 +34,6 @@ public class IndexController {
                 Sort.by(direction, sortBy)
         );
         Page<WeatherAlert> alertPage = weatherAlertRepository.findAll(pageable);
-
         model.addAttribute("alertPage", alertPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", alertPage.getTotalPages());

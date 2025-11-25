@@ -13,19 +13,5 @@
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.js}"></script>
     <script th:src="@{/webjars/jquery/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
-
-    <!-- Google tag (gtag.js) - only in production -->
-    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'production')}">
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYCKCY83YT"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'G-PYCKCY83YT');
-        </script>
-    </th:block>
 </head>
 </html>
